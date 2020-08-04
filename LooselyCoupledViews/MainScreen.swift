@@ -10,11 +10,24 @@ import SwiftUI
 struct MainScreen: View {
     
     let countries = ["USA", "Pakistan", "Iceland", "England"]
+    @State private var selectedCountry: String?
     
     var body: some View {
         NavigationView {
-            CountryListView(countries: countries)
-                .navigationBarTitle("Countries")
+            VStack {
+                CountryListView(countries: countries, onSelected: {
+                    country in
+                    self.selectedCountry = country
+                })
+                
+                NavigationLink(destination: Text(self.selectedCountry ?? ""), isActive: .constant(self.selectedCountry != nil)) {
+                    EmptyView()
+                }
+            }
+            .onAppear {
+                self.selectedCountry = nil
+            }
+            .navigationBarTitle("Countries")
         }
     }
 }
